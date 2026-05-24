@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import coverImg from "@/assets/quedate-conmigo-cover.jpg";
 import bertaPortrait from "@/assets/berta-portrait.jpg";
 import bertaWriting from "@/assets/berta-writing.jpg";
@@ -79,7 +79,7 @@ function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <a href="#inicio" className="font-serif text-lg tracking-wide">
+        <a href="#inicio" className="font-serif text-xl italic tracking-wide">
           Berta Moral Martín
         </a>
         <nav className="hidden items-center gap-8 md:flex">
@@ -87,23 +87,19 @@ function Header() {
             <a
               key={l.href}
               href={l.href}
-              className="text-sm text-foreground/80 transition hover:text-burgundy"
+              className="font-ui text-sm text-foreground/80 transition hover:text-burgundy"
             >
               {l.label}
             </a>
           ))}
           <a
             href="#newsletter"
-            className="rounded-full bg-burgundy px-5 py-2 text-sm text-primary-foreground transition hover:opacity-90"
+            className="button-primary rounded-full bg-burgundy px-5 py-2 text-sm text-primary-foreground hover:opacity-90"
           >
             Quiero leerlo
           </a>
         </nav>
-        <button
-          aria-label="Menú"
-          className="md:hidden"
-          onClick={() => setOpen((o) => !o)}
-        >
+        <button aria-label="Menú" className="md:hidden" onClick={() => setOpen((o) => !o)}>
           <div className="space-y-1.5">
             <span className="block h-px w-6 bg-foreground" />
             <span className="block h-px w-6 bg-foreground" />
@@ -119,7 +115,7 @@ function Header() {
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="py-2 text-sm text-foreground/80"
+                className="font-ui py-2 text-sm text-foreground/80"
               >
                 {l.label}
               </a>
@@ -127,7 +123,7 @@ function Header() {
             <a
               href="#newsletter"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full bg-burgundy px-5 py-2 text-center text-sm text-primary-foreground"
+              className="button-primary mt-2 rounded-full bg-burgundy px-5 py-2 text-center text-sm text-primary-foreground"
             >
               Quiero leerlo
             </a>
@@ -140,41 +136,36 @@ function Header() {
 
 function Hero() {
   return (
-    <section
-      id="inicio"
-      className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28"
-    >
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-secondary/40 via-background to-background" />
+    <section id="inicio" className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_72%_18%,oklch(0.86_0.03_18_/_0.45),transparent_34%),linear-gradient(to_bottom,var(--secondary),var(--background)_58%)]" />
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-[1.05fr_0.95fr] md:gap-16">
         <div className="reveal">
-          <p className="mb-6 text-xs uppercase tracking-[0.35em] text-burgundy/80">
-            Una novela de Berta Moral Martín
-          </p>
-          <h1 className="font-serif text-5xl leading-[1.02] tracking-tight md:text-7xl">
-            Quédate <span className="italic text-burgundy">conmigo</span>
+          <p className="eyebrow mb-6">Una novela de Berta Moral Martín</p>
+          <h1 className="font-serif text-6xl leading-[0.92] md:text-8xl">
+            Quédate <span className="kinetic-word">conmigo</span>
           </h1>
-          <p className="mt-6 max-w-xl font-serif text-xl italic text-foreground/80 md:text-2xl">
+          <p className="mt-7 max-w-xl font-serif text-2xl italic leading-snug text-foreground/80 md:text-3xl">
             Una novela sobre el amor, la pérdida y la valentía de reconstruirse.
           </p>
-          <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            Hay historias que no comienzan cuando dos personas se encuentran,
-            sino cuando una decide quedarse.
+          <p className="mt-8 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
+            Hay historias que no comienzan cuando dos personas se encuentran, sino cuando una{" "}
+            <span className="ink-highlight">decide quedarse</span>.
           </p>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-            La primera novela de <strong className="text-foreground">Berta Moral Martín</strong>.
-            Un relato autobiográfico inspirado en una etapa de ruptura, cambio y
-            búsqueda interior.
+          <p className="mt-4 max-w-xl text-pretty text-sm leading-relaxed text-muted-foreground">
+            La primera novela de{" "}
+            <strong className="font-semibold text-foreground">Berta Moral Martín</strong>. Un relato
+            autobiográfico inspirado en una etapa de ruptura, cambio y búsqueda interior.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <a
               href="#newsletter"
-              className="rounded-full bg-burgundy px-7 py-3.5 text-sm tracking-wide text-primary-foreground shadow-lg shadow-burgundy/10 transition hover:translate-y-[-1px] hover:opacity-95"
+              className="button-primary rounded-full bg-burgundy px-7 py-3.5 text-sm tracking-wide text-primary-foreground hover:opacity-95"
             >
               Quiero saber cuándo sale
             </a>
             <a
               href="#libro"
-              className="rounded-full border border-foreground/20 px-7 py-3.5 text-sm tracking-wide text-foreground transition hover:border-burgundy hover:text-burgundy"
+              className="button-secondary rounded-full border border-foreground/20 px-7 py-3.5 text-sm tracking-wide text-foreground hover:border-burgundy hover:text-burgundy"
             >
               Conoce la historia
             </a>
@@ -189,7 +180,7 @@ function Hero() {
             <img
               src={coverImg}
               alt='Portada de la novela "Quédate conmigo" de Berta Moral Martín'
-              className="w-full rounded-sm object-cover shadow-2xl shadow-foreground/20"
+              className="w-full rounded-sm object-cover shadow-2xl shadow-foreground/20 transition duration-700 hover:-rotate-1 hover:scale-[1.015]"
             />
           </div>
         </div>
@@ -203,40 +194,31 @@ function AboutBook() {
     <section id="libro" className="py-24 md:py-32">
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 md:grid-cols-3">
         <div className="md:col-span-2 reveal">
-          <p className="text-xs uppercase tracking-[0.35em] text-burgundy/80">
-            Sobre el libro
-          </p>
+          <p className="eyebrow">Sobre el libro</p>
           <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
-            Una historia íntima sobre volver a empezar.
+            Una historia íntima sobre <span className="ink-highlight">volver a empezar</span>.
           </h2>
-          <div className="mt-8 space-y-5 text-lg leading-relaxed text-foreground/80">
+          <div className="mt-8 max-w-2xl space-y-5 text-pretty text-lg leading-relaxed text-foreground/80">
             <p>
-              <em>“Quédate conmigo”</em> es una novela autobiográfica que nace
-              en un momento de ruptura y cambio. Una historia sobre el amor,
-              pero también sobre la identidad, la pérdida y la reconstrucción
-              personal.
+              <em>“Quédate conmigo”</em> es una novela autobiográfica que nace en un momento de
+              ruptura y cambio. Una historia sobre el amor, pero también sobre la identidad, la
+              pérdida y la reconstrucción personal.
             </p>
             <p>
-              A través de sus páginas, Berta recorre un proceso íntimo de
-              separación, cuestionamiento y crecimiento. La novela convierte lo
-              vivido en palabra, y la palabra en una forma de comprender,
-              atravesar y empezar de nuevo.
+              A través de sus páginas, Berta recorre un proceso íntimo de separación,
+              cuestionamiento y crecimiento. La novela convierte lo vivido en palabra, y la palabra
+              en una forma de comprender, atravesar y empezar de nuevo.
             </p>
           </div>
         </div>
-        <aside className="reveal rounded-xl border border-border bg-card p-8 shadow-sm">
-          <Detail label="Género">
-            Narrativa autobiográfica con elementos de ficción.
-          </Detail>
+        <aside className="literary-card reveal rounded-[1.35rem] border border-border/70 p-8">
+          <Detail label="Género">Narrativa autobiográfica con elementos de ficción.</Detail>
           <Divider />
           <Detail label="Temas principales">
-            Ruptura, amor, identidad, salud mental, amistad, familia, pérdida y
-            reconstrucción.
+            Ruptura, amor, identidad, salud mental, amistad, familia, pérdida y reconstrucción.
           </Detail>
           <Divider />
-          <Detail label="Tono">
-            Vulnerable, emocional, íntimo, terapéutico y honesto.
-          </Detail>
+          <Detail label="Tono">Vulnerable, emocional, íntimo, terapéutico y honesto.</Detail>
         </aside>
       </div>
     </section>
@@ -246,12 +228,8 @@ function AboutBook() {
 function Detail({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-[11px] uppercase tracking-[0.3em] text-burgundy/80">
-        {label}
-      </p>
-      <p className="mt-2 font-serif text-lg leading-snug text-foreground/85">
-        {children}
-      </p>
+      <p className="eyebrow">{label}</p>
+      <p className="mt-2 font-serif text-lg leading-snug text-foreground/85">{children}</p>
     </div>
   );
 }
@@ -263,16 +241,16 @@ function Divider() {
 function Premise() {
   return (
     <section className="relative py-24 md:py-32">
-      <div className="absolute inset-0 -z-10 bg-burgundy" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_22%_16%,oklch(0.72_0.09_80_/_0.18),transparent_36%),linear-gradient(135deg,var(--primary),oklch(0.29_0.08_22))]" />
       <div className="mx-auto max-w-4xl px-6 text-center text-primary-foreground reveal">
         <span className="font-script text-3xl text-gold">la premisa</span>
-        <blockquote className="mt-6 font-serif text-3xl italic leading-tight md:text-5xl">
-          “Hay historias que no comienzan cuando dos personas se encuentran,
-          sino cuando una decide quedarse.”
+        <blockquote className="mt-6 font-serif text-4xl italic leading-[1.05] md:text-6xl">
+          “Hay historias que no comienzan cuando dos personas se encuentran, sino cuando una decide
+          quedarse.”
         </blockquote>
         <p className="mt-8 text-base text-primary-foreground/80 md:text-lg">
-          Una frase que resume el corazón de la novela: la decisión de
-          permanecer en una misma cuando todo alrededor cambia.
+          Una frase que resume el corazón de la novela: la decisión de permanecer en una misma
+          cuando todo alrededor cambia.
         </p>
       </div>
     </section>
@@ -292,26 +270,24 @@ function BehindTheStory() {
           />
         </div>
         <div className="reveal order-1 md:order-2">
-          <p className="text-xs uppercase tracking-[0.35em] text-burgundy/80">
-            La historia detrás
-          </p>
+          <p className="eyebrow">La historia detrás</p>
           <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
             La historia detrás de <em>“Quédate conmigo”</em>.
           </h2>
-          <div className="mt-8 space-y-5 text-lg leading-relaxed text-foreground/80">
-            <p>Esta novela nace de una necesidad: ordenar lo vivido.</p>
+          <div className="mt-8 space-y-5 text-pretty text-lg leading-relaxed text-foreground/80">
             <p>
-              Berta escribe desde un lugar profundamente personal, donde la
-              separación, las dudas, los vínculos, las pérdidas y los afectos
-              se convierten en materia narrativa. La protagonista atraviesa un
-              proceso de cambio vital en el que no solo debe comprender lo que
-              ha perdido, sino también descubrir quién quiere ser a partir de
-              ahora.
+              Esta novela nace de una necesidad:{" "}
+              <span className="ink-highlight">ordenar lo vivido</span>.
             </p>
             <p>
-              Familia, amistades, entorno laboral, amor, traiciones y salud
-              mental forman parte de un viaje emocional que muchas personas
-              reconocerán como propio.
+              Berta escribe desde un lugar profundamente personal, donde la separación, las dudas,
+              los vínculos, las pérdidas y los afectos se convierten en materia narrativa. La
+              protagonista atraviesa un proceso de cambio vital en el que no solo debe comprender lo
+              que ha perdido, sino también descubrir quién quiere ser a partir de ahora.
+            </p>
+            <p>
+              Familia, amistades, entorno laboral, amor, traiciones y salud mental forman parte de
+              un viaje emocional que muchas personas reconocerán como propio.
             </p>
           </div>
         </div>
@@ -352,25 +328,23 @@ function Themes() {
     <section className="bg-secondary/40 py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <div className="max-w-2xl reveal">
-          <p className="text-xs uppercase tracking-[0.35em] text-burgundy/80">
-            Temas
-          </p>
+          <p className="eyebrow">Temas</p>
           <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
             Temas que atraviesan la novela
           </h2>
         </div>
-        <div className="mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {themes.map((t, i) => (
             <div
               key={t.title}
-              className="reveal bg-background p-8 transition hover:bg-card"
+              className="literary-card reveal group rounded-[1.35rem] p-8 transition hover:-translate-y-1"
               style={{ transitionDelay: `${i * 60}ms` }}
             >
-              <span className="font-serif text-sm italic text-burgundy">
+              <span className="font-serif text-sm italic text-burgundy transition group-hover:tracking-[0.18em]">
                 0{i + 1}
               </span>
               <h3 className="mt-3 font-serif text-2xl">{t.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-pretty text-sm leading-relaxed text-muted-foreground">
                 {t.text}
               </p>
             </div>
@@ -395,9 +369,7 @@ function ForYou() {
   return (
     <section className="py-24 md:py-32">
       <div className="mx-auto max-w-4xl px-6 reveal">
-        <p className="text-xs uppercase tracking-[0.35em] text-burgundy/80">
-          Para ti
-        </p>
+        <p className="eyebrow">Para ti</p>
         <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
           Este libro es para ti si…
         </h2>
@@ -405,16 +377,13 @@ function ForYou() {
           {forYou.map((line) => (
             <li key={line} className="flex items-start gap-4">
               <span className="mt-3 block h-px w-8 shrink-0 bg-burgundy" />
-              <span className="font-serif text-lg text-foreground/85 md:text-xl">
-                {line}
-              </span>
+              <span className="font-serif text-lg text-foreground/85 md:text-xl">{line}</span>
             </li>
           ))}
         </ul>
-        <p className="mt-12 max-w-2xl text-base italic leading-relaxed text-muted-foreground">
-          “Quédate conmigo” habla especialmente a mujeres alrededor de los 30
-          años, pero también a cualquier persona que haya amado, perdido,
-          dudado y vuelto a empezar.
+        <p className="mt-12 max-w-2xl text-pretty text-base italic leading-relaxed text-muted-foreground">
+          “Quédate conmigo” habla especialmente a mujeres alrededor de los 30 años, pero también a
+          cualquier persona que haya amado, perdido, dudado y vuelto a empezar.
         </p>
       </div>
     </section>
@@ -425,16 +394,13 @@ function Excerpt() {
   return (
     <section className="bg-accent/25 py-24 md:py-32">
       <div className="mx-auto max-w-4xl px-6 text-center reveal">
-        <p className="text-xs uppercase tracking-[0.35em] text-burgundy/80">
-          Fragmento
-        </p>
+        <p className="eyebrow">Fragmento</p>
         <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
           Un fragmento de la novela
         </h2>
-        <div className="mx-auto mt-12 max-w-2xl border-y border-burgundy/20 py-12">
+        <div className="literary-card mx-auto mt-12 max-w-2xl rounded-[1.5rem] border-y border-burgundy/20 px-8 py-12">
           <p className="font-serif text-2xl italic leading-snug text-foreground/85">
-            Próximamente podrás leer aquí un pequeño fragmento de{" "}
-            <em>“Quédate conmigo”</em>.
+            Próximamente podrás leer aquí un pequeño fragmento de <em>“Quédate conmigo”</em>.
           </p>
         </div>
         <p className="mt-8 text-muted-foreground">
@@ -442,7 +408,7 @@ function Excerpt() {
         </p>
         <a
           href="#newsletter"
-          className="mt-8 inline-block rounded-full bg-burgundy px-7 py-3.5 text-sm tracking-wide text-primary-foreground transition hover:opacity-90"
+          className="button-primary mt-8 inline-block rounded-full bg-burgundy px-7 py-3.5 text-sm tracking-wide text-primary-foreground hover:opacity-90"
         >
           Avísame cuando esté disponible
         </a>
@@ -464,24 +430,21 @@ function Author() {
           />
         </div>
         <div className="reveal">
-          <p className="text-xs uppercase tracking-[0.35em] text-burgundy/80">
-            La autora
-          </p>
+          <p className="eyebrow">La autora</p>
           <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
             Sobre Berta Moral Martín
           </h2>
-          <div className="mt-8 space-y-5 text-lg leading-relaxed text-foreground/80">
+          <div className="mt-8 max-w-2xl space-y-5 text-pretty text-lg leading-relaxed text-foreground/80">
             <p>
-              Berta Moral Martín debuta como escritora con{" "}
-              <em>“Quédate conmigo”</em>, una novela nacida de la necesidad de
-              transformar una experiencia vital en relato. Su escritura parte
-              de lo íntimo, de lo cotidiano y de lo emocional, con una mirada
-              honesta hacia los procesos de cambio, pérdida y reconstrucción.
+              Berta Moral Martín debuta como escritora con <em>“Quédate conmigo”</em>, una novela
+              nacida de la necesidad de transformar una experiencia vital en relato. Su escritura
+              parte de lo íntimo, de lo cotidiano y de lo emocional, con una mirada honesta hacia
+              los procesos de cambio, pérdida y reconstrucción.
             </p>
             <p>
-              En su primera novela, Berta se atreve a mirar su propia historia
-              con sensibilidad y convertirla en una narración capaz de
-              acompañar a quienes también están aprendiendo a empezar de nuevo.
+              En su primera novela, Berta se atreve a mirar su propia historia con sensibilidad y
+              convertirla en una narración capaz de acompañar a quienes también están aprendiendo a
+              empezar de nuevo.
             </p>
           </div>
           <blockquote className="mt-10 border-l-2 border-burgundy pl-6 font-script text-2xl text-burgundy md:text-3xl">
@@ -499,17 +462,14 @@ function Newsletter() {
     <section id="newsletter" className="relative overflow-hidden py-24 md:py-32">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-secondary/40 to-background" />
       <div className="mx-auto max-w-3xl px-6 text-center reveal">
-        <p className="text-xs uppercase tracking-[0.35em] text-burgundy/80">
-          Lanzamiento próximamente
-        </p>
+        <p className="eyebrow">Lanzamiento próximamente</p>
         <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
-          Sé de las primeras en leerla.
+          Sé de las primeras en <span className="ink-highlight">leerla</span>.
         </h2>
-        <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-          <em>“Quédate conmigo”</em> estará disponible próximamente. Déjanos tu
-          email y sé de las primeras personas en conocer la fecha de
-          lanzamiento, leer fragmentos exclusivos y recibir novedades de Berta
-          Moral Martín.
+        <p className="mx-auto mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
+          <em>“Quédate conmigo”</em> estará disponible próximamente. Déjanos tu email y sé de las
+          primeras personas en conocer la fecha de lanzamiento, leer fragmentos exclusivos y recibir
+          novedades de Berta Moral Martín.
         </p>
 
         <form
@@ -523,25 +483,25 @@ function Newsletter() {
             required
             type="text"
             placeholder="Tu nombre"
-            className="rounded-full border border-border bg-background px-5 py-3.5 text-sm outline-none transition focus:border-burgundy"
+            className="font-ui rounded-full border border-border bg-background px-5 py-3.5 text-sm outline-none transition focus:border-burgundy"
           />
           <input
             required
             type="email"
             placeholder="Tu email"
-            className="rounded-full border border-border bg-background px-5 py-3.5 text-sm outline-none transition focus:border-burgundy"
+            className="font-ui rounded-full border border-border bg-background px-5 py-3.5 text-sm outline-none transition focus:border-burgundy"
           />
           <button
             type="submit"
-            className="sm:col-span-2 rounded-full bg-burgundy px-7 py-3.5 text-sm tracking-wide text-primary-foreground transition hover:opacity-90"
+            className="button-primary rounded-full bg-burgundy px-7 py-3.5 text-sm tracking-wide text-primary-foreground hover:opacity-90 sm:col-span-2"
           >
             {submitted ? "Gracias por unirte ✦" : "Quiero estar dentro"}
           </button>
         </form>
 
         <p className="mt-5 text-xs text-muted-foreground">
-          Sin spam. Solo noticias importantes sobre el libro, el lanzamiento y
-          contenidos especiales de la autora.
+          Sin spam. Solo noticias importantes sobre el libro, el lanzamiento y contenidos especiales
+          de la autora.
         </p>
         <p className="mt-10 font-serif text-lg italic text-foreground/70">
           Fecha de lanzamiento: <span className="text-burgundy">próximamente</span>
@@ -570,26 +530,21 @@ function Community() {
     <section className="py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <div className="max-w-2xl reveal">
-          <p className="text-xs uppercase tracking-[0.35em] text-burgundy/80">
-            Comunidad
-          </p>
+          <p className="eyebrow">Comunidad</p>
           <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
             Acompaña el camino de la novela.
           </h2>
-          <p className="mt-6 text-lg leading-relaxed text-foreground/80">
-            El lanzamiento de una primera novela no empieza el día que se
-            publica. Empieza cuando una historia encuentra a sus primeros
-            lectores.
+          <p className="mt-6 text-pretty text-lg leading-relaxed text-foreground/80">
+            El lanzamiento de una primera novela no empieza el día que se publica. Empieza cuando
+            una historia encuentra a sus primeros lectores.
           </p>
         </div>
         <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
           {blocks.map((b, i) => (
             <div key={b.title} className="reveal border-t border-burgundy pt-6">
-              <span className="font-serif text-sm italic text-burgundy">
-                0{i + 1}
-              </span>
+              <span className="font-serif text-sm italic text-burgundy">0{i + 1}</span>
               <h3 className="mt-2 font-serif text-2xl">{b.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-pretty text-sm leading-relaxed text-muted-foreground">
                 {b.text}
               </p>
             </div>
@@ -598,7 +553,7 @@ function Community() {
         <div className="mt-12 text-center reveal">
           <a
             href="#newsletter"
-            className="inline-block rounded-full border border-foreground/20 px-7 py-3.5 text-sm tracking-wide text-foreground transition hover:border-burgundy hover:text-burgundy"
+            className="button-secondary inline-block rounded-full border border-foreground/20 px-7 py-3.5 text-sm tracking-wide text-foreground hover:border-burgundy hover:text-burgundy"
           >
             Unirme a la comunidad
           </a>
@@ -620,15 +575,14 @@ function Social() {
       <div className="mx-auto max-w-4xl px-6 text-center reveal">
         <h2 className="font-serif text-3xl md:text-4xl">Sigue a Berta</h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          Reflexiones, proceso creativo, frases, lanzamiento y contenido detrás
-          de la novela.
+          Reflexiones, proceso creativo, frases, lanzamiento y contenido detrás de la novela.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           {items.map((i) => (
             <a
               key={i.label}
               href={i.href}
-              className="rounded-full border border-foreground/20 px-6 py-2.5 text-sm transition hover:border-burgundy hover:text-burgundy"
+              className="button-secondary rounded-full border border-foreground/20 px-6 py-2.5 text-sm hover:border-burgundy hover:text-burgundy"
             >
               {i.label}
             </a>
@@ -645,16 +599,11 @@ function Contact() {
     <section id="contacto" className="py-24 md:py-32">
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-14 px-6 md:grid-cols-2">
         <div className="reveal">
-          <p className="text-xs uppercase tracking-[0.35em] text-burgundy/80">
-            Contacto y prensa
-          </p>
-          <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
-            Hablemos.
-          </h2>
-          <p className="mt-6 text-lg leading-relaxed text-foreground/80">
-            Para entrevistas, colaboraciones, clubs de lectura, presentaciones,
-            prensa o propuestas editoriales, puedes contactar con Berta Moral
-            Martín.
+          <p className="eyebrow">Contacto y prensa</p>
+          <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">Hablemos.</h2>
+          <p className="mt-6 text-pretty text-lg leading-relaxed text-foreground/80">
+            Para entrevistas, colaboraciones, clubs de lectura, presentaciones, prensa o propuestas
+            editoriales, puedes contactar con Berta Moral Martín.
           </p>
           <a
             href="mailto:contacto@bertamoral.com"
@@ -668,32 +617,32 @@ function Contact() {
             e.preventDefault();
             setSent(true);
           }}
-          className="reveal space-y-4 rounded-xl border border-border bg-card p-8"
+          className="literary-card reveal space-y-4 rounded-[1.35rem] border border-border/70 p-8"
         >
           <input
             required
             placeholder="Nombre"
-            className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none focus:border-burgundy"
+            className="font-ui w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none focus:border-burgundy"
           />
           <input
             required
             type="email"
             placeholder="Email"
-            className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none focus:border-burgundy"
+            className="font-ui w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none focus:border-burgundy"
           />
           <input
             placeholder="Motivo del contacto"
-            className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none focus:border-burgundy"
+            className="font-ui w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none focus:border-burgundy"
           />
           <textarea
             required
             placeholder="Mensaje"
             rows={5}
-            className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none focus:border-burgundy"
+            className="font-ui w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none focus:border-burgundy"
           />
           <button
             type="submit"
-            className="w-full rounded-full bg-burgundy px-7 py-3.5 text-sm tracking-wide text-primary-foreground transition hover:opacity-90"
+            className="button-primary w-full rounded-full bg-burgundy px-7 py-3.5 text-sm tracking-wide text-primary-foreground hover:opacity-90"
           >
             {sent ? "Mensaje enviado ✦" : "Enviar mensaje"}
           </button>
@@ -710,26 +659,41 @@ function Footer() {
         <div>
           <p className="font-serif text-2xl">Berta Moral Martín</p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
-            Autora de <em>“Quédate conmigo”</em>. Una novela sobre amor,
-            pérdida y reconstrucción.
+            Autora de <em>“Quédate conmigo”</em>. Una novela sobre amor, pérdida y reconstrucción.
           </p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-burgundy/80">
-            Navegación
-          </p>
+          <p className="eyebrow">Navegación</p>
           <ul className="mt-4 space-y-2 text-sm text-foreground/80">
-            <li><a href="#libro" className="hover:text-burgundy">El libro</a></li>
-            <li><a href="#autora" className="hover:text-burgundy">La autora</a></li>
-            <li><a href="#newsletter" className="hover:text-burgundy">Newsletter</a></li>
-            <li><a href="#contacto" className="hover:text-burgundy">Contacto</a></li>
-            <li><a href="#" className="hover:text-burgundy">Política de privacidad</a></li>
+            <li>
+              <a href="#libro" className="hover:text-burgundy">
+                El libro
+              </a>
+            </li>
+            <li>
+              <a href="#autora" className="hover:text-burgundy">
+                La autora
+              </a>
+            </li>
+            <li>
+              <a href="#newsletter" className="hover:text-burgundy">
+                Newsletter
+              </a>
+            </li>
+            <li>
+              <a href="#contacto" className="hover:text-burgundy">
+                Contacto
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-burgundy">
+                Política de privacidad
+              </a>
+            </li>
           </ul>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-burgundy/80">
-            Contacto
-          </p>
+          <p className="eyebrow">Contacto</p>
           <a
             href="mailto:contacto@bertamoral.com"
             className="mt-4 inline-block text-sm text-foreground/80 hover:text-burgundy"
@@ -748,7 +712,7 @@ function Footer() {
 function Index() {
   useReveal();
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="site-grain min-h-screen bg-background text-foreground">
       <Header />
       <main>
         <Hero />

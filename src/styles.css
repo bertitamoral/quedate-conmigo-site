@@ -1,7 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,WONK,wght@9..144,0..100,0..1,300..800&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&family=Inter:wght@400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap");
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
@@ -60,29 +60,30 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Literata", ui-serif, Georgia, serif;
+  --font-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-script: "Dancing Script", cursive;
 }
 
 :root {
   --radius: 0.625rem;
   /* Warm literary palette */
-  --background: oklch(0.985 0.006 80);          /* off-white / blanco roto */
-  --foreground: oklch(0.22 0.01 60);            /* carbón cálido */
+  --background: oklch(0.985 0.006 80); /* off-white / blanco roto */
+  --foreground: oklch(0.22 0.01 60); /* carbón cálido */
   --card: oklch(0.975 0.008 75);
   --card-foreground: oklch(0.22 0.01 60);
   --popover: oklch(0.985 0.006 80);
   --popover-foreground: oklch(0.22 0.01 60);
-  --primary: oklch(0.38 0.12 22);               /* burdeos / rojo vino */
+  --primary: oklch(0.38 0.12 22); /* burdeos / rojo vino */
   --primary-foreground: oklch(0.985 0.006 80);
-  --secondary: oklch(0.92 0.018 60);            /* beige cálido */
+  --secondary: oklch(0.92 0.018 60); /* beige cálido */
   --secondary-foreground: oklch(0.25 0.02 40);
   --muted: oklch(0.94 0.012 70);
   --muted-foreground: oklch(0.48 0.015 50);
-  --accent: oklch(0.86 0.03 18);                /* rosa empolvado */
+  --accent: oklch(0.86 0.03 18); /* rosa empolvado */
   --accent-foreground: oklch(0.3 0.05 22);
-  --gold: oklch(0.72 0.09 80);                  /* dorado sutil */
+  --gold: oklch(0.72 0.09 80); /* dorado sutil */
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.985 0.006 80);
   --border: oklch(0.88 0.012 60);
@@ -148,11 +149,22 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
   }
 
-  h1, h2, h3, h4, h5, .font-serif {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  .font-serif {
     font-family: var(--font-serif);
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
+    font-variation-settings:
+      "SOFT" 38,
+      "WONK" 1;
+    text-wrap: balance;
   }
 
   .font-script {
@@ -161,18 +173,135 @@
 }
 
 @layer utilities {
-  .text-gold { color: var(--gold); }
-  .bg-burgundy { background-color: var(--primary); }
-  .text-burgundy { color: var(--primary); }
+  .text-gold {
+    color: var(--gold);
+  }
+  .bg-burgundy {
+    background-color: var(--primary);
+  }
+  .text-burgundy {
+    color: var(--primary);
+  }
+  .font-ui {
+    font-family: var(--font-ui);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .site-grain::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.13;
+    mix-blend-mode: multiply;
+    background-image:
+      radial-gradient(circle at 12% 18%, oklch(0.72 0.09 80 / 0.12) 0 1px, transparent 1px),
+      radial-gradient(circle at 83% 64%, oklch(0.38 0.12 22 / 0.1) 0 1px, transparent 1px);
+    background-size:
+      18px 18px,
+      23px 23px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: color-mix(in oklch, var(--primary), transparent 18%);
+  }
+
+  .ink-highlight {
+    position: relative;
+    display: inline;
+    font-weight: 650;
+    color: var(--foreground);
+    background-image: linear-gradient(to top, oklch(0.86 0.03 18 / 0.58) 0 42%, transparent 42%);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding-inline: 0.08em;
+  }
+
+  .kinetic-word {
+    display: inline-block;
+    color: var(--primary);
+    font-style: italic;
+    font-variation-settings:
+      "SOFT" 75,
+      "WONK" 1;
+    transform-origin: 50% 70%;
+    animation: breathe-word 7s ease-in-out infinite;
+  }
+
+  .literary-card {
+    background:
+      linear-gradient(135deg, oklch(0.985 0.006 80 / 0.92), oklch(0.94 0.012 70 / 0.62)),
+      var(--card);
+    box-shadow: 0 20px 55px oklch(0.3 0.05 22 / 0.08);
+  }
+
+  .button-primary,
+  .button-secondary {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    transition:
+      transform 240ms ease,
+      box-shadow 240ms ease,
+      border-color 240ms ease,
+      color 240ms ease,
+      background-color 240ms ease,
+      opacity 240ms ease;
+  }
+
+  .button-primary {
+    box-shadow: 0 18px 42px oklch(0.38 0.12 22 / 0.18);
+  }
+
+  .button-primary:hover,
+  .button-secondary:hover {
+    transform: translateY(-2px);
+  }
+
+  .button-primary:active,
+  .button-secondary:active {
+    transform: translateY(0) scale(0.98);
+  }
 
   /* Subtle scroll reveal */
   .reveal {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 900ms ease, transform 900ms ease;
+    transform: translateY(26px) scale(0.985);
+    filter: blur(6px);
+    transition:
+      opacity 900ms ease,
+      transform 900ms ease,
+      filter 900ms ease;
   }
   .reveal.in {
     opacity: 1;
     transform: none;
+    filter: none;
+  }
+
+  .reveal.in .draw-line {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes breathe-word {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+    font-weight: 520;
+  }
+  50% {
+    transform: translateY(-0.035em) rotate(0.5deg);
+    font-weight: 690;
   }
 }
