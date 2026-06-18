@@ -14,13 +14,16 @@ Idea central:
 
 ## Stack y arquitectura
 
-- App React 19 con Vite.
+- App React 19 con Vite y TanStack Start.
 - Routing con TanStack Router / TanStack Start.
+- Despliegue con Nitro, preparado para deteccion automatica de Vercel.
 - Estilos con Tailwind CSS v4 en `src/styles.css`.
 - Componentes UI tipo shadcn/Radix en `src/components/ui`.
 - Ruta principal en `src/routes/index.tsx`.
+- Checkout en `src/routes/comprar.tsx`.
+- Funciones de email/compra en `src/server/email.ts`.
 - Root HTML, metadatos globales, errores y providers en `src/routes/__root.tsx`.
-- Configuracion Vite/TanStack en `vite.config.ts`.
+- Configuracion estandar Vite/TanStack/Nitro en `vite.config.ts`.
 - Assets visuales importados desde `src/assets`.
 
 Comandos utiles:
@@ -151,7 +154,7 @@ Quédate conmigo | Berta Moral Martín
 Meta description:
 
 ```text
-Primera novela de Berta Moral Martín. Una historia autobiográfica sobre amor, ruptura, identidad, pérdida y reconstrucción personal. Lanzamiento próximamente.
+Descubre Quédate conmigo, la primera novela de Berta Moral Martín. Una historia autobiográfica sobre amor, ruptura, identidad y reconstrucción personal.
 ```
 
 Keywords:
@@ -164,10 +167,13 @@ Revisar `src/routes/__root.tsx`: todavia puede contener metadatos heredados de L
 
 ## Estado actual del codigo
 
-- `src/routes/index.tsx` contiene la landing principal y ya importa imagenes de portada y retrato.
-- `src/styles.css` define la paleta literaria en OKLCH, fuentes de Google, utilidades `bg-burgundy`, `text-burgundy`, `text-gold` y animacion `.reveal`.
+- `src/routes/index.tsx` contiene la landing principal y usa la cubierta final y fotografias de Berta.
+- `src/routes/comprar.tsx` implementa el flujo de datos de envio y eleccion Bizum/Wallapop.
+- `src/server/email.ts` contiene server functions de Resend para pedidos, contacto y newsletter.
+- `src/styles.css` define el sistema visual de produccion en OKLCH.
 - `src/routes/__root.tsx` mantiene el shell, provider de React Query, paginas de error y metadatos globales.
-- `vite.config.ts` usa `@lovable.dev/vite-tanstack-config`; no duplicar plugins que ese paquete ya inyecta.
+- `vite.config.ts` usa plugins estandar y Nitro. No reintroducir Lovable ni Cloudflare.
+- Los valores comerciales y credenciales se documentan en `.env.example`.
 
 ## Criterios de calidad
 

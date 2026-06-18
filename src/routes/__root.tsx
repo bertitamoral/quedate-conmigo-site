@@ -14,17 +14,17 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <p className="font-serif text-8xl text-primary">404</p>
+        <h1 className="mt-4 font-serif text-4xl text-foreground">Esta página no está aquí.</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          Puede que la historia haya cambiado de lugar. Puedes volver al inicio y continuar leyendo.
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            Volver al inicio
           </Link>
         </div>
       </div>
@@ -39,11 +39,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
+        <h1 className="font-serif text-4xl text-foreground">La página no ha podido cargar.</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          Puedes intentarlo de nuevo o regresar al inicio.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -53,13 +51,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            Intentar de nuevo
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
+            Volver al inicio
           </a>
         </div>
       </div>
@@ -72,24 +70,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Quedate Conmigo , novela primeriza Berta Moral Martin" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Quedate Conmigo , novela primeriza Berta Moral Martin" },
+      { title: "Quédate conmigo | Berta Moral Martín" },
+      {
+        name: "description",
+        content:
+          "Web oficial de Berta Moral Martín, autora de Quédate conmigo. Una novela sobre amor, pérdida, identidad y reconstrucción.",
+      },
+      { name: "author", content: "Berta Moral Martín" },
+      { name: "theme-color", content: "#a31820" },
+      { property: "og:title", content: "Quédate conmigo | Berta Moral Martín" },
+      {
+        property: "og:description",
+        content: "Una historia sobre el amor, la pérdida y la valentía de volver a elegirse.",
+      },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "twitter:description", content: "Quedate Conmigo , novela primeriza Berta Moral Martin" },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4edb8587-0e5e-4e5b-9efe-6b461bd48d12/id-preview-160472ec--f4ed89ca-00ad-45d2-b230-3f913d95f8f2.lovable.app-1779639995574.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4edb8587-0e5e-4e5b-9efe-6b461bd48d12/id-preview-160472ec--f4ed89ca-00ad-45d2-b230-3f913d95f8f2.lovable.app-1779639995574.png" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Quédate conmigo | Berta Moral Martín" },
+      {
+        name: "twitter:description",
+        content: "Una historia sobre el amor, la pérdida y la valentía de volver a elegirse.",
+      },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
   }),
   shellComponent: RootShell,
@@ -100,7 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         <HeadContent />
       </head>
