@@ -44,7 +44,9 @@ export const Route = createFileRoute("/comprar")({
 function PurchasePage() {
   const config = Route.useLoaderData();
   const navigate = useNavigate();
-  const [step, setStep] = useState<"details" | "method" | "bizum-success">("details");
+  const [step, setStep] = useState<"details" | "method" | "bizum-success" | "wallapop-success">(
+    "details",
+  );
   const [order, setOrder] = useState<OrderInput | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -75,8 +77,8 @@ function PurchasePage() {
   });
 
   useEffect(() => {
-    if (step !== "bizum-success") return;
-    const timeout = window.setTimeout(() => navigate({ to: "/gracias" }), 12000);
+    if (step !== "bizum-success" && step !== "wallapop-success") return;
+    const timeout = window.setTimeout(() => navigate({ to: "/gracias" }), 180000);
     return () => window.clearTimeout(timeout);
   }, [navigate, step]);
 
@@ -109,6 +111,8 @@ function PurchasePage() {
     if (!order || !config.wallapopUrl) return;
     window.open(config.wallapopUrl, "_blank", "noopener,noreferrer");
     void recordOrderAttempt({ data: { ...order, paymentMethod: "wallapop" } });
+    setStep("wallapop-success");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   async function choosePaypal() {
@@ -155,13 +159,21 @@ function PurchasePage() {
               <div />
               <span
                 className={
-                  step === "method" ? "active" : step === "bizum-success" ? "complete" : ""
+                  step === "method"
+                    ? "active"
+                    : step === "bizum-success" || step === "wallapop-success"
+                      ? "complete"
+                      : ""
                 }
               >
                 2
               </span>
               <div />
-              <span className={step === "bizum-success" ? "active" : ""}>3</span>
+              <span
+                className={step === "bizum-success" || step === "wallapop-success" ? "active" : ""}
+              >
+                3
+              </span>
             </div>
 
             {step === "details" ? (
@@ -387,6 +399,27 @@ function PurchasePage() {
                 <p className="success-note">
                   También hemos avisado a Berta de tu pedido. Te llevamos a la página de
                   agradecimiento automáticamente.
+                </p>
+                <Link className="button button-primary" to="/gracias">
+                  Continuar
+                </Link>
+              </div>
+            ) : null}
+
+            {step === "wallapop-success" ? (
+              <div className="purchase-success">
+                <span className="success-icon">
+                  <Check aria-hidden="true" />
+                </span>
+                <p className="section-kicker">Pedido registrado</p>
+                <h2>Gracias, {order?.name.split(" ")[0]}.</h2>
+                <p>
+                  Hemos abierto Wallapop en una pestaña nueva para que completes la compra allí.
+                  Cuando termines el pago, vuelve aquí y pulsa "Continuar".
+                </p>
+                <p className="success-note">
+                  Si no pulsas nada, te llevamos a la página de agradecimiento automáticamente en
+                  unos minutos.
                 </p>
                 <Link className="button button-primary" to="/gracias">
                   Continuar
