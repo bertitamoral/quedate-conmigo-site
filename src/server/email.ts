@@ -120,6 +120,40 @@ async function insertOrder(order: OrderInput, paymentMethod: PaymentMethod) {
   if (error) console.error("Supabase order insert failed", error);
 }
 
+const paymentMethodLabels: Record<PaymentMethod, string> = {
+  bizum: "Bizum",
+  paypal: "PayPal",
+  wallapop: "Wallapop",
+};
+
+async function sendCheckoutNotification(order: OrderInput, paymentMethod: PaymentMethod) {
+  const addressLine = [
+    order.address,
+    order.addressExtra,
+    `${order.postalCode} ${order.city}`,
+    order.province,
+    order.country,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  const result = await deliverEmail({
+    to: process.env.EMAIL_CHECKOUT,
+    subject: `Nuevo pedido por ${paymentMethodLabels[paymentMethod]}: ${order.name}`,
+    replyTo: order.email,
+    html: `
+      <h1>Nuevo pedido por ${paymentMethodLabels[paymentMethod]}</h1>
+      <p><strong>Nombre:</strong> ${escapeHtml(order.name)}</p>
+      <p><strong>Email:</strong> ${escapeHtml(order.email)}</p>
+      <p><strong>Direccion de envio:</strong> ${escapeHtml(addressLine)}</p>
+    `,
+  });
+
+  if (!result.ok) {
+    console.error(`Checkout notification email failed (${paymentMethod})`, result.error);
+  }
+}
+
 async function insertNewsletterSubscriber(name: string, email: string) {
   const supabase = getSupabaseServerClient();
   if (!supabase) return;
@@ -174,6 +208,7 @@ export const recordOrderAttempt = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { paymentMethod, ...order } = data;
     await insertOrder(order, paymentMethod);
+    await sendCheckoutNotification(order, paymentMethod);
     return { ok: true as const };
   });
 
@@ -181,32 +216,7 @@ export const sendBizumOrder = createServerFn({ method: "POST" })
   .inputValidator(orderSchema)
   .handler(async ({ data }) => {
     await insertOrder(data, "bizum");
-
-    const addressLine = [
-      data.address,
-      data.addressExtra,
-      `${data.postalCode} ${data.city}`,
-      data.province,
-      data.country,
-    ]
-      .filter(Boolean)
-      .join(", ");
-
-    const emailResult = await deliverEmail({
-      to: process.env.PAYMENT_EMAIL_TO || process.env.ORDER_EMAIL_TO,
-      subject: `Intento de pago por Bizum: ${data.name}`,
-      replyTo: data.email,
-      html: `
-        <h1>Alguien esta intentando pagar por Bizum</h1>
-        <p><strong>Nombre:</strong> ${escapeHtml(data.name)}</p>
-        <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
-        <p><strong>Direccion de envio:</strong> ${escapeHtml(addressLine)}</p>
-      `,
-    });
-
-    if (!emailResult.ok) {
-      console.error("Bizum notification email failed", emailResult.error);
-    }
+    await sendCheckoutNotification(data, "bizum");
 
     const pricing = getPricing();
 
@@ -227,9 +237,7 @@ export const getPurchaseConfig = createServerFn({ method: "GET" }).handler(async
 
   return {
     bizumAvailable: Boolean(
-      process.env.BIZUM_PHONE &&
-      pricing.bookPrice !== null &&
-      (process.env.PAYMENT_EMAIL_TO || process.env.ORDER_EMAIL_TO),
+      process.env.BIZUM_PHONE && pricing.bookPrice !== null && process.env.EMAIL_CHECKOUT,
     ),
     wallapopAvailable: Boolean(process.env.WALLAPOP_CHECKOUT_URL),
     wallapopUrl: process.env.WALLAPOP_CHECKOUT_URL ?? "",
