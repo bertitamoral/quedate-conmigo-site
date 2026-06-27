@@ -12,7 +12,7 @@ create table if not exists public.orders (
   city text not null,
   province text not null,
   country text not null default 'España',
-  payment_method text not null check (payment_method in ('bizum', 'paypal', 'wallapop')),
+  payment_method text not null check (payment_method in ('bizum', 'wallapop')),
   book_price numeric(10, 2),
   shipping_price numeric(10, 2) default 0.75,
   total_price numeric(10, 2),
