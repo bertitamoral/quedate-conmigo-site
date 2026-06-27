@@ -2,7 +2,6 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowDown, ArrowRight, BookOpen, Instagram, Linkedin, Mail, Quote } from "lucide-react";
 import { type FormEvent, useEffect, useState } from "react";
 
-import bertaCafe from "@/assets/berta-cafe.jpg";
 import bertaPortrait from "@/assets/berta-portrait.jpg";
 import bertaWriting from "@/assets/berta-writing.jpg";
 import coverFinal from "@/assets/quedate-conmigo-cover-final.jpg";
@@ -202,12 +201,6 @@ function StorySection() {
           className="story-image-main"
           loading="lazy"
           src={bertaWriting}
-        />
-        <img
-          alt="Berta Moral Martín en una terraza de Barcelona"
-          className="story-image-secondary"
-          loading="lazy"
-          src={bertaCafe}
         />
       </div>
       <div className="story-copy" data-reveal>

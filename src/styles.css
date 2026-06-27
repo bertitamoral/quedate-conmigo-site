@@ -609,26 +609,14 @@ img {
 
 .story-image-stack {
   position: relative;
-  min-height: 43rem;
 }
 
 .story-image-main {
-  width: min(75%, 37rem);
+  width: min(100%, 37rem);
   height: 42rem;
   object-fit: cover;
   object-position: center;
   box-shadow: 0 32px 70px oklch(0.2 0.03 30 / 0.16);
-}
-
-.story-image-secondary {
-  position: absolute;
-  right: 0;
-  bottom: -2rem;
-  width: min(42%, 17rem);
-  aspect-ratio: 0.78;
-  object-fit: cover;
-  border: 0.7rem solid var(--background);
-  box-shadow: 0 18px 45px oklch(0.2 0.03 30 / 0.2);
 }
 
 .story-copy h2,
@@ -1657,18 +1645,9 @@ img {
     bottom: 0.8rem;
   }
 
-  .story-image-stack {
-    min-height: 31rem;
-  }
-
   .story-image-main {
     width: 82%;
     height: 30rem;
-  }
-
-  .story-image-secondary {
-    width: 45%;
-    border-width: 0.4rem;
   }
 
   .themes-list li {
