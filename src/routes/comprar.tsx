@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
-  CreditCard,
   ExternalLink,
   LoaderCircle,
   MapPin,
@@ -113,13 +112,6 @@ function PurchasePage() {
     void recordOrderAttempt({ data: { ...order, paymentMethod: "wallapop" } });
     setStep("wallapop-success");
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  async function choosePaypal() {
-    if (!order || !config.paypalUrl) return;
-    setSubmitting(true);
-    await recordOrderAttempt({ data: { ...order, paymentMethod: "paypal" } }).catch(() => {});
-    window.location.assign(config.paypalUrl);
   }
 
   return (
@@ -273,8 +265,8 @@ function PurchasePage() {
                   <p className="section-kicker">Forma de compra</p>
                   <h2>Elige cómo quieres completar el pedido.</h2>
                   <p>
-                    Con Bizum registramos primero tu dirección. PayPal y Wallapop te llevan a su
-                    propio entorno de pago.
+                    Con Bizum registramos primero tu dirección. Wallapop te lleva a su propio
+                    entorno de pago.
                   </p>
                 </div>
 
@@ -309,24 +301,6 @@ function PurchasePage() {
                     ) : (
                       <ArrowRight aria-hidden="true" />
                     )}
-                  </button>
-
-                  <button
-                    className="payment-option"
-                    disabled={!config.paypalAvailable || submitting}
-                    onClick={choosePaypal}
-                    type="button"
-                  >
-                    <CreditCard aria-hidden="true" />
-                    <span>
-                      <strong>Pagar por PayPal</strong>
-                      <small>
-                        {config.paypalAvailable
-                          ? "Pago a través de PayPal"
-                          : "Enlace pendiente de configuración"}
-                      </small>
-                    </span>
-                    <ArrowRight aria-hidden="true" />
                   </button>
 
                   <button

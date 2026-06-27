@@ -122,7 +122,6 @@ async function insertOrder(order: OrderInput, paymentMethod: PaymentMethod) {
 
 const paymentMethodLabels: Record<PaymentMethod, string> = {
   bizum: "Bizum",
-  paypal: "PayPal",
   wallapop: "Wallapop",
 };
 
@@ -202,7 +201,7 @@ export const sendContactMessage = createServerFn({ method: "POST" })
 
 const recordOrderSchema = orderSchema.extend({ paymentMethod: paymentMethodSchema });
 
-/** Registra el pedido en Supabase antes de redirigir a PayPal o Wallapop. */
+/** Registra el pedido en Supabase antes de redirigir a Wallapop. */
 export const recordOrderAttempt = createServerFn({ method: "POST" })
   .inputValidator(recordOrderSchema)
   .handler(async ({ data }) => {
@@ -241,8 +240,6 @@ export const getPurchaseConfig = createServerFn({ method: "GET" }).handler(async
     ),
     wallapopAvailable: Boolean(process.env.WALLAPOP_CHECKOUT_URL),
     wallapopUrl: process.env.WALLAPOP_CHECKOUT_URL ?? "",
-    paypalAvailable: Boolean(process.env.PAYPAL_CHECKOUT_URL),
-    paypalUrl: process.env.PAYPAL_CHECKOUT_URL ?? "",
     price: pricing.priceLabel,
     shipping: pricing.shippingLabel,
     total: pricing.totalLabel,

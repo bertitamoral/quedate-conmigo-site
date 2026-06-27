@@ -26,7 +26,7 @@ export const orderSchema = z.object({
   email: z.string().trim().email("Escribe un email valido.").max(160),
 });
 
-export const paymentMethodSchema = z.enum(["bizum", "paypal", "wallapop"]);
+export const paymentMethodSchema = z.enum(["bizum", "wallapop"]);
 
 export type NewsletterInput = z.infer<typeof newsletterSchema>;
 export type ContactInput = z.infer<typeof contactSchema>;
