@@ -360,8 +360,12 @@ function PurchasePage() {
                 <p className="section-kicker">Pedido registrado</p>
                 <h2>Gracias, {order?.name.split(" ")[0]}.</h2>
                 <p>
-                  Para completar el pedido, realiza el Bizum con estos datos. El libro se enviará
-                  cuando el pago quede confirmado.
+                  Envía un Bizum de <strong>{payment.total || payment.price}</strong>
+                  {payment.shipping
+                    ? ` (${payment.price} del libro + ${payment.shipping} de gastos de envío)`
+                    : ""}{" "}
+                  al número <strong>{payment.phone}</strong>. El libro se enviará cuando el pago
+                  quede confirmado.
                 </p>
                 <dl className="bizum-details">
                   <div>

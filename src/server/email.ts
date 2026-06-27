@@ -192,7 +192,7 @@ export const sendBizumOrder = createServerFn({ method: "POST" })
       .filter(Boolean)
       .join(", ");
 
-    const result = await deliverEmail({
+    const emailResult = await deliverEmail({
       to: process.env.PAYMENT_EMAIL_TO || process.env.ORDER_EMAIL_TO,
       subject: `Intento de pago por Bizum: ${data.name}`,
       replyTo: data.email,
@@ -204,7 +204,9 @@ export const sendBizumOrder = createServerFn({ method: "POST" })
       `,
     });
 
-    if (!result.ok) return result;
+    if (!emailResult.ok) {
+      console.error("Bizum notification email failed", emailResult.error);
+    }
 
     const pricing = getPricing();
 
