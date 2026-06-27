@@ -1,6 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
 
-import { contactSchema, newsletterSchema, orderSchema } from "@/lib/schemas";
+import {
+  contactSchema,
+  newsletterSchema,
+  orderSchema,
+  paymentMethodSchema,
+  type OrderInput,
+  type PaymentMethod,
+} from "@/lib/schemas";
+import { getSupabaseServerClient } from "@/lib/supabase";
+
+const SHIPPING_COST = 0.75;
 
 type ActionResult =
   | { ok: true }
@@ -18,6 +28,25 @@ function escapeHtml(value: string) {
         "'": "&#039;",
       })[character] ?? character,
   );
+}
+
+function formatEuro(amount: number) {
+  return new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(amount);
+}
+
+function getPricing() {
+  const bookPrice = Number.parseFloat(process.env.BOOK_PRICE ?? "");
+  const hasPrice = Number.isFinite(bookPrice);
+  const total = hasPrice ? bookPrice + SHIPPING_COST : null;
+
+  return {
+    bookPrice: hasPrice ? bookPrice : null,
+    shipping: SHIPPING_COST,
+    total,
+    priceLabel: hasPrice ? formatEuro(bookPrice) : "",
+    shippingLabel: formatEuro(SHIPPING_COST),
+    totalLabel: total !== null ? formatEuro(total) : "",
+  };
 }
 
 async function deliverEmail(options: {
@@ -68,10 +97,46 @@ async function deliverEmail(options: {
   }
 }
 
+async function insertOrder(order: OrderInput, paymentMethod: PaymentMethod) {
+  const supabase = getSupabaseServerClient();
+  if (!supabase) return;
+
+  const pricing = getPricing();
+  const { error } = await supabase.from("orders").insert({
+    name: order.name,
+    email: order.email,
+    address: order.address,
+    address_extra: order.addressExtra || null,
+    postal_code: order.postalCode,
+    city: order.city,
+    province: order.province,
+    country: order.country,
+    payment_method: paymentMethod,
+    book_price: pricing.bookPrice,
+    shipping_price: pricing.shipping,
+    total_price: pricing.total,
+  });
+
+  if (error) console.error("Supabase order insert failed", error);
+}
+
+async function insertNewsletterSubscriber(name: string, email: string) {
+  const supabase = getSupabaseServerClient();
+  if (!supabase) return;
+
+  const { error } = await supabase
+    .from("newsletter_subscribers")
+    .upsert({ name, email }, { onConflict: "email" });
+
+  if (error) console.error("Supabase newsletter insert failed", error);
+}
+
 export const subscribeNewsletter = createServerFn({ method: "POST" })
   .inputValidator(newsletterSchema)
-  .handler(async ({ data }) =>
-    deliverEmail({
+  .handler(async ({ data }) => {
+    await insertNewsletterSubscriber(data.name, data.email);
+
+    return deliverEmail({
       to: process.env.CONTACT_EMAIL_TO,
       subject: `Nueva lectora: ${data.name}`,
       replyTo: data.email,
@@ -80,8 +145,8 @@ export const subscribeNewsletter = createServerFn({ method: "POST" })
         <p><strong>Nombre:</strong> ${escapeHtml(data.name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
       `,
-    }),
-  );
+    });
+  });
 
 export const sendContactMessage = createServerFn({ method: "POST" })
   .inputValidator(contactSchema)
@@ -101,44 +166,75 @@ export const sendContactMessage = createServerFn({ method: "POST" })
     }),
   );
 
+const recordOrderSchema = orderSchema.extend({ paymentMethod: paymentMethodSchema });
+
+/** Registra el pedido en Supabase antes de redirigir a PayPal o Wallapop. */
+export const recordOrderAttempt = createServerFn({ method: "POST" })
+  .inputValidator(recordOrderSchema)
+  .handler(async ({ data }) => {
+    const { paymentMethod, ...order } = data;
+    await insertOrder(order, paymentMethod);
+    return { ok: true as const };
+  });
+
 export const sendBizumOrder = createServerFn({ method: "POST" })
   .inputValidator(orderSchema)
   .handler(async ({ data }) => {
+    await insertOrder(data, "bizum");
+
+    const addressLine = [
+      data.address,
+      data.addressExtra,
+      `${data.postalCode} ${data.city}`,
+      data.province,
+      data.country,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
     const result = await deliverEmail({
-      to: process.env.ORDER_EMAIL_TO,
-      subject: `Nuevo pedido de ${data.name}`,
+      to: process.env.PAYMENT_EMAIL_TO || process.env.ORDER_EMAIL_TO,
+      subject: `Intento de pago por Bizum: ${data.name}`,
       replyTo: data.email,
       html: `
-        <h1>Nuevo pedido de "Quedate conmigo"</h1>
+        <h1>Alguien esta intentando pagar por Bizum</h1>
         <p><strong>Nombre:</strong> ${escapeHtml(data.name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
-        <p><strong>Direccion:</strong> ${escapeHtml(data.address)}</p>
-        ${data.addressExtra ? `<p><strong>Informacion adicional:</strong> ${escapeHtml(data.addressExtra)}</p>` : ""}
-        <p><strong>Codigo postal:</strong> ${escapeHtml(data.postalCode)}</p>
-        <p><strong>Localidad:</strong> ${escapeHtml(data.city)}</p>
-        <p><strong>Provincia:</strong> ${escapeHtml(data.province)}</p>
+        <p><strong>Direccion de envio:</strong> ${escapeHtml(addressLine)}</p>
       `,
     });
 
     if (!result.ok) return result;
 
+    const pricing = getPricing();
+
     return {
       ok: true as const,
       payment: {
         phone: process.env.BIZUM_PHONE ?? "",
-        price: process.env.BOOK_PRICE ?? "",
-        shipping: process.env.SHIPPING_PRICE ?? "",
+        price: pricing.priceLabel,
+        shipping: pricing.shippingLabel,
+        total: pricing.totalLabel,
         concept: `Quedate conmigo - ${data.name}`,
       },
     };
   });
 
-export const getPurchaseConfig = createServerFn({ method: "GET" }).handler(async () => ({
-  bizumAvailable: Boolean(
-    process.env.BIZUM_PHONE && process.env.BOOK_PRICE && process.env.ORDER_EMAIL_TO,
-  ),
-  wallapopAvailable: Boolean(process.env.WALLAPOP_CHECKOUT_URL),
-  wallapopUrl: process.env.WALLAPOP_CHECKOUT_URL ?? "",
-  price: process.env.BOOK_PRICE ?? "",
-  shipping: process.env.SHIPPING_PRICE ?? "",
-}));
+export const getPurchaseConfig = createServerFn({ method: "GET" }).handler(async () => {
+  const pricing = getPricing();
+
+  return {
+    bizumAvailable: Boolean(
+      process.env.BIZUM_PHONE &&
+      pricing.bookPrice !== null &&
+      (process.env.PAYMENT_EMAIL_TO || process.env.ORDER_EMAIL_TO),
+    ),
+    wallapopAvailable: Boolean(process.env.WALLAPOP_CHECKOUT_URL),
+    wallapopUrl: process.env.WALLAPOP_CHECKOUT_URL ?? "",
+    paypalAvailable: Boolean(process.env.PAYPAL_CHECKOUT_URL),
+    paypalUrl: process.env.PAYPAL_CHECKOUT_URL ?? "",
+    price: pricing.priceLabel,
+    shipping: pricing.shippingLabel,
+    total: pricing.totalLabel,
+  };
+});

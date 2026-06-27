@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
+  CreditCard,
   ExternalLink,
   LoaderCircle,
   MapPin,
@@ -18,7 +19,7 @@ import { FormStatus } from "@/components/form-status";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { orderSchema, type OrderInput } from "@/lib/schemas";
-import { getPurchaseConfig, sendBizumOrder } from "@/server/email";
+import { getPurchaseConfig, recordOrderAttempt, sendBizumOrder } from "@/server/email";
 
 const siteUrl = import.meta.env.VITE_SITE_URL || "https://bertamoral.com";
 
@@ -51,6 +52,7 @@ function PurchasePage() {
     phone: string;
     price: string;
     shipping: string;
+    total: string;
     concept: string;
   } | null>(null);
 
@@ -68,12 +70,13 @@ function PurchasePage() {
       postalCode: "",
       city: "",
       province: "",
+      country: "España",
     },
   });
 
   useEffect(() => {
     if (step !== "bizum-success") return;
-    const timeout = window.setTimeout(() => navigate({ to: "/" }), 12000);
+    const timeout = window.setTimeout(() => navigate({ to: "/gracias" }), 12000);
     return () => window.clearTimeout(timeout);
   }, [navigate, step]);
 
@@ -103,8 +106,16 @@ function PurchasePage() {
   }
 
   function chooseWallapop() {
-    if (!config.wallapopUrl) return;
-    window.location.assign(config.wallapopUrl);
+    if (!order || !config.wallapopUrl) return;
+    window.open(config.wallapopUrl, "_blank", "noopener,noreferrer");
+    void recordOrderAttempt({ data: { ...order, paymentMethod: "wallapop" } });
+  }
+
+  async function choosePaypal() {
+    if (!order || !config.paypalUrl) return;
+    setSubmitting(true);
+    await recordOrderAttempt({ data: { ...order, paymentMethod: "paypal" } }).catch(() => {});
+    window.location.assign(config.paypalUrl);
   }
 
   return (
@@ -218,6 +229,15 @@ function PurchasePage() {
                     />
                     {errors.province ? <small>{errors.province.message}</small> : null}
                   </div>
+                  <div className="field field-wide">
+                    <label htmlFor="order-country">País</label>
+                    <input
+                      autoComplete="country-name"
+                      id="order-country"
+                      {...register("country")}
+                    />
+                    {errors.country ? <small>{errors.country.message}</small> : null}
+                  </div>
 
                   <div className="purchase-privacy field-wide">
                     <ShieldCheck aria-hidden="true" />
@@ -241,10 +261,20 @@ function PurchasePage() {
                   <p className="section-kicker">Forma de compra</p>
                   <h2>Elige cómo quieres completar el pedido.</h2>
                   <p>
-                    Con Bizum registramos primero tu dirección. Wallapop te lleva a su entorno de
-                    compra protegido.
+                    Con Bizum registramos primero tu dirección. PayPal y Wallapop te llevan a su
+                    propio entorno de pago.
                   </p>
                 </div>
+
+                {config.total ? (
+                  <div className="purchase-total">
+                    <span>Importe final</span>
+                    <strong>{config.total}</strong>
+                    <small>
+                      {config.price} libro + {config.shipping} gastos de envío
+                    </small>
+                  </div>
+                ) : null}
 
                 <div className="payment-options">
                   <button
@@ -271,6 +301,24 @@ function PurchasePage() {
 
                   <button
                     className="payment-option"
+                    disabled={!config.paypalAvailable || submitting}
+                    onClick={choosePaypal}
+                    type="button"
+                  >
+                    <CreditCard aria-hidden="true" />
+                    <span>
+                      <strong>Pagar por PayPal</strong>
+                      <small>
+                        {config.paypalAvailable
+                          ? "Pago a través de PayPal"
+                          : "Enlace pendiente de configuración"}
+                      </small>
+                    </span>
+                    <ArrowRight aria-hidden="true" />
+                  </button>
+
+                  <button
+                    className="payment-option"
                     disabled={!config.wallapopAvailable}
                     onClick={chooseWallapop}
                     type="button"
@@ -280,7 +328,7 @@ function PurchasePage() {
                       <strong>Comprar en Wallapop</strong>
                       <small>
                         {config.wallapopAvailable
-                          ? "Pago y envío gestionados por Wallapop"
+                          ? "Se abre en una pestaña nueva"
                           : "Enlace pendiente de configuración"}
                       </small>
                     </span>
@@ -321,10 +369,10 @@ function PurchasePage() {
                     <dd>{payment.phone}</dd>
                   </div>
                   <div>
-                    <dt>Importe</dt>
+                    <dt>Importe total</dt>
                     <dd>
-                      {payment.price}
-                      {payment.shipping ? ` + ${payment.shipping} de envío` : ""}
+                      {payment.total || payment.price}
+                      {payment.shipping ? ` (${payment.price} + ${payment.shipping} de envío)` : ""}
                     </dd>
                   </div>
                   <div>
@@ -333,10 +381,11 @@ function PurchasePage() {
                   </div>
                 </dl>
                 <p className="success-note">
-                  También hemos avisado a Berta de tu pedido. Volverás al inicio automáticamente.
+                  También hemos avisado a Berta de tu pedido. Te llevamos a la página de
+                  agradecimiento automáticamente.
                 </p>
-                <Link className="button button-primary" to="/">
-                  Volver al inicio
+                <Link className="button button-primary" to="/gracias">
+                  Continuar
                 </Link>
               </div>
             ) : null}

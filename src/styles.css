@@ -1227,6 +1227,38 @@ img {
   text-decoration: underline;
 }
 
+.purchase-total {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1.1rem 1.4rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--secondary);
+}
+
+.purchase-total span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.purchase-total strong {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--primary);
+}
+
+.purchase-total small {
+  width: 100%;
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+}
+
 .payment-options {
   display: grid;
   gap: 1rem;
@@ -1361,6 +1393,35 @@ img {
   margin: 0;
   font-size: 0.8rem;
   line-height: 1.5;
+}
+
+.thanks-success {
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.thanks-newsletter {
+  margin: 2.5rem 0;
+  padding: clamp(1.75rem, 4vw, 2.75rem);
+  border-radius: 4px;
+  background: var(--red-deep);
+  color: var(--white-warm);
+  text-align: left;
+}
+
+.thanks-newsletter .section-kicker,
+.thanks-newsletter h2 {
+  text-align: left;
+  color: var(--white-warm);
+}
+
+.thanks-newsletter > p {
+  margin: 0.8rem 0 1.5rem;
+  color: oklch(0.99 0.004 75 / 0.8);
+}
+
+.thanks-newsletter .newsletter-form {
+  text-align: left;
 }
 
 .spin {

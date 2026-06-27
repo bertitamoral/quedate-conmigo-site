@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
+import { Route as GraciasRouteImport } from './routes/gracias'
 import { Route as ComprarRouteImport } from './routes/comprar'
 import { Route as IndexRouteImport } from './routes/index'
 
 const PrivacidadRoute = PrivacidadRouteImport.update({
   id: '/privacidad',
   path: '/privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GraciasRoute = GraciasRouteImport.update({
+  id: '/gracias',
+  path: '/gracias',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComprarRoute = ComprarRouteImport.update({
@@ -32,30 +38,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/comprar': typeof ComprarRoute
+  '/gracias': typeof GraciasRoute
   '/privacidad': typeof PrivacidadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/comprar': typeof ComprarRoute
+  '/gracias': typeof GraciasRoute
   '/privacidad': typeof PrivacidadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/comprar': typeof ComprarRoute
+  '/gracias': typeof GraciasRoute
   '/privacidad': typeof PrivacidadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/comprar' | '/privacidad'
+  fullPaths: '/' | '/comprar' | '/gracias' | '/privacidad'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/comprar' | '/privacidad'
-  id: '__root__' | '/' | '/comprar' | '/privacidad'
+  to: '/' | '/comprar' | '/gracias' | '/privacidad'
+  id: '__root__' | '/' | '/comprar' | '/gracias' | '/privacidad'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ComprarRoute: typeof ComprarRoute
+  GraciasRoute: typeof GraciasRoute
   PrivacidadRoute: typeof PrivacidadRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/privacidad'
       fullPath: '/privacidad'
       preLoaderRoute: typeof PrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gracias': {
+      id: '/gracias'
+      path: '/gracias'
+      fullPath: '/gracias'
+      preLoaderRoute: typeof GraciasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comprar': {
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ComprarRoute: ComprarRoute,
+  GraciasRoute: GraciasRoute,
   PrivacidadRoute: PrivacidadRoute,
 }
 export const routeTree = rootRouteImport
