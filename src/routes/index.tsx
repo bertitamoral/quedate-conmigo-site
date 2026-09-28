@@ -106,10 +106,10 @@ function Hero() {
           Una historia sobre el amor, la pérdida y la valentía de volver a elegirse.
         </p>
         <div className="hero-actions">
-          <Link className="button button-primary" to="/comprar">
-            Comprar el libro
+          <a className="button button-primary" href="/#contacto">
+            Contactar a Berta
             <ArrowRight aria-hidden="true" />
-          </Link>
+          </a>
           <a className="button button-on-dark" href="#libro">
             Descubrir la historia
           </a>
@@ -144,9 +144,9 @@ function BookIntroduction() {
             de comprender, atravesar y empezar de nuevo.
           </p>
         </div>
-        <Link className="text-link" to="/comprar">
-          Reservar un ejemplar <ArrowRight aria-hidden="true" />
-        </Link>
+        <a className="text-link" href="/#contacto">
+          Contactar a Berta <ArrowRight aria-hidden="true" />
+        </a>
       </div>
       <dl className="book-facts" data-reveal>
         <div>
@@ -451,10 +451,10 @@ function PurchaseBand() {
         <p>Primera edición</p>
         <h2>Una historia para leer. Una decisión para recordar.</h2>
       </div>
-      <Link className="button button-light" data-reveal to="/comprar">
-        Comprar Quédate conmigo
+      <a className="button button-light" data-reveal href="/#contacto">
+        Contactar a Berta
         <ArrowRight aria-hidden="true" />
-      </Link>
+      </a>
     </section>
   );
 }

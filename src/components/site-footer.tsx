@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { Instagram, Linkedin, Mail } from "lucide-react";
 
 import { TikTokIcon } from "@/components/tiktok-icon";
@@ -35,7 +34,7 @@ export function SiteFooter() {
         <nav aria-label="Navegación del pie" className="site-footer-links">
           <a href="/#libro">El libro</a>
           <a href="/#autora">La autora</a>
-          <Link to="/comprar">Comprar</Link>
+          <a href="/#contacto">Contacto</a>
           <Link to="/privacidad">Privacidad</Link>
         </nav>
 

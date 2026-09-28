@@ -1,16 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
-import {
-  contactSchema,
-  newsletterSchema,
-  orderSchema,
-  paymentMethodSchema,
-  type OrderInput,
-  type PaymentMethod,
-} from "@/lib/schemas";
+import { contactSchema, newsletterSchema } from "@/lib/schemas";
 import { getSupabaseServerClient } from "@/lib/supabase";
-
-const SHIPPING_COST = 0.75;
 
 type ActionResult =
   | { ok: true }
@@ -28,25 +19,6 @@ function escapeHtml(value: string) {
         "'": "&#039;",
       })[character] ?? character,
   );
-}
-
-function formatEuro(amount: number) {
-  return new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(amount);
-}
-
-function getPricing() {
-  const bookPrice = Number.parseFloat(process.env.BOOK_PRICE ?? "");
-  const hasPrice = Number.isFinite(bookPrice);
-  const total = hasPrice ? bookPrice + SHIPPING_COST : null;
-
-  return {
-    bookPrice: hasPrice ? bookPrice : null,
-    shipping: SHIPPING_COST,
-    total,
-    priceLabel: hasPrice ? formatEuro(bookPrice) : "",
-    shippingLabel: formatEuro(SHIPPING_COST),
-    totalLabel: total !== null ? formatEuro(total) : "",
-  };
 }
 
 async function deliverEmail(options: {
@@ -97,62 +69,6 @@ async function deliverEmail(options: {
   }
 }
 
-async function insertOrder(order: OrderInput, paymentMethod: PaymentMethod) {
-  const supabase = getSupabaseServerClient();
-  if (!supabase) return;
-
-  const pricing = getPricing();
-  const { error } = await supabase.from("orders").insert({
-    name: order.name,
-    email: order.email,
-    address: order.address,
-    address_extra: order.addressExtra || null,
-    postal_code: order.postalCode,
-    city: order.city,
-    province: order.province,
-    country: order.country,
-    payment_method: paymentMethod,
-    book_price: pricing.bookPrice,
-    shipping_price: pricing.shipping,
-    total_price: pricing.total,
-  });
-
-  if (error) console.error("Supabase order insert failed", error);
-}
-
-const paymentMethodLabels: Record<PaymentMethod, string> = {
-  bizum: "Bizum",
-  wallapop: "Wallapop",
-};
-
-async function sendCheckoutNotification(order: OrderInput, paymentMethod: PaymentMethod) {
-  const addressLine = [
-    order.address,
-    order.addressExtra,
-    `${order.postalCode} ${order.city}`,
-    order.province,
-    order.country,
-  ]
-    .filter(Boolean)
-    .join(", ");
-
-  const result = await deliverEmail({
-    to: process.env.EMAIL_CHECKOUT,
-    subject: `Nuevo pedido por ${paymentMethodLabels[paymentMethod]}: ${order.name}`,
-    replyTo: order.email,
-    html: `
-      <h1>Nuevo pedido por ${paymentMethodLabels[paymentMethod]}</h1>
-      <p><strong>Nombre:</strong> ${escapeHtml(order.name)}</p>
-      <p><strong>Email:</strong> ${escapeHtml(order.email)}</p>
-      <p><strong>Direccion de envio:</strong> ${escapeHtml(addressLine)}</p>
-    `,
-  });
-
-  if (!result.ok) {
-    console.error(`Checkout notification email failed (${paymentMethod})`, result.error);
-  }
-}
-
 async function insertNewsletterSubscriber(name: string, email: string) {
   const supabase = getSupabaseServerClient();
   if (!supabase) return;
@@ -199,49 +115,3 @@ export const sendContactMessage = createServerFn({ method: "POST" })
     }),
   );
 
-const recordOrderSchema = orderSchema.extend({ paymentMethod: paymentMethodSchema });
-
-/** Registra el pedido en Supabase antes de redirigir a Wallapop. */
-export const recordOrderAttempt = createServerFn({ method: "POST" })
-  .inputValidator(recordOrderSchema)
-  .handler(async ({ data }) => {
-    const { paymentMethod, ...order } = data;
-    await insertOrder(order, paymentMethod);
-    await sendCheckoutNotification(order, paymentMethod);
-    return { ok: true as const };
-  });
-
-export const sendBizumOrder = createServerFn({ method: "POST" })
-  .inputValidator(orderSchema)
-  .handler(async ({ data }) => {
-    await insertOrder(data, "bizum");
-    await sendCheckoutNotification(data, "bizum");
-
-    const pricing = getPricing();
-
-    return {
-      ok: true as const,
-      payment: {
-        phone: process.env.BIZUM_PHONE ?? "",
-        price: pricing.priceLabel,
-        shipping: pricing.shippingLabel,
-        total: pricing.totalLabel,
-        concept: `Quedate conmigo - ${data.name}`,
-      },
-    };
-  });
-
-export const getPurchaseConfig = createServerFn({ method: "GET" }).handler(async () => {
-  const pricing = getPricing();
-
-  return {
-    bizumAvailable: Boolean(
-      process.env.BIZUM_PHONE && pricing.bookPrice !== null && process.env.EMAIL_CHECKOUT,
-    ),
-    wallapopAvailable: Boolean(process.env.WALLAPOP_CHECKOUT_URL),
-    wallapopUrl: process.env.WALLAPOP_CHECKOUT_URL ?? "",
-    price: pricing.priceLabel,
-    shipping: pricing.shippingLabel,
-    total: pricing.totalLabel,
-  };
-});

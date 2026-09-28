@@ -38,9 +38,9 @@ export function SiteHeader({ solid = false }: { solid?: boolean }) {
               {item.label}
             </a>
           ))}
-          <Link className="button button-primary button-compact" to="/comprar">
-            Comprar
-          </Link>
+          <a className="button button-primary button-compact" href="/#contacto">
+            Contactar
+          </a>
         </nav>
 
         <button
@@ -61,9 +61,9 @@ export function SiteHeader({ solid = false }: { solid?: boolean }) {
               {item.label}
             </a>
           ))}
-          <Link className="button button-primary" onClick={() => setOpen(false)} to="/comprar">
-            Comprar el libro
-          </Link>
+          <a className="button button-primary" href="/#contacto" onClick={() => setOpen(false)}>
+            Contactar
+          </a>
         </nav>
       ) : null}
     </header>
