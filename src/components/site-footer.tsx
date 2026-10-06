@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Instagram, Linkedin, Mail } from "lucide-react";
 
 import { TikTokIcon } from "@/components/tiktok-icon";
