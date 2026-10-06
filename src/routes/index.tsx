@@ -172,8 +172,8 @@ function FullCoverSection() {
       <div className="cover-spread-copy" data-reveal>
         <Quote aria-hidden="true" />
         <blockquote>
-          Hay historias que no comienzan cuando dos personas se encuentran, sino cuando una decide
-          quedarse.
+          <strong>Hay historias que no comienzan cuando dos personas se encuentran, sino cuando una decide
+          quedarse.</strong>
         </blockquote>
         <p>
           En una ciudad que respira memoria y futuro, la protagonista debe enfrentarse a la pregunta
